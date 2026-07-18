@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { useAuth } from "@/context/AuthContext";
@@ -25,6 +26,7 @@ const defaultProfile: ProfileSettings = {
 };
 
 export default function SettingsPage() {
+  const router = useRouter();
   const { logout } = useAuth();
   const [profile, setProfile] = useState<ProfileSettings>(() => {
     if (typeof window === "undefined") {
@@ -86,7 +88,7 @@ export default function SettingsPage() {
 
   function handleLogout() {
     logout();
-    window.location.href = "/login";
+    router.replace("/login");
   }
 
   return (

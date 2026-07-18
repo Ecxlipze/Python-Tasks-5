@@ -3,7 +3,6 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -20,15 +19,13 @@ export function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [access, setAccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("access");
-
-    if (token) {
-      setAccess(token);
+  const [access, setAccess] = useState<string | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
     }
-  }, []);
+
+    return localStorage.getItem("access");
+  });
 
   const login = (
     accessToken: string,

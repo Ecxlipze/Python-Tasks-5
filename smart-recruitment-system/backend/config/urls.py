@@ -11,8 +11,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("apps.jobs.urls")),
     path("api/v1/", include("apps.candidates.urls")),
-    path("api/v1/", include("apps.jobs.urls")),
-    path("api/v1/", include("apps.candidates.urls")),
     path("api/v1/", include("apps.resumes.urls")),
     path("api/v1/", include("apps.analysis.urls")),
     path(
@@ -24,7 +22,6 @@ urlpatterns = [
         TokenRefreshView.as_view(),
     ),
     path("api/v1/auth/", include("apps.accounts.urls")),
-    
 ]
 if settings.DEBUG:
     urlpatterns += static(
