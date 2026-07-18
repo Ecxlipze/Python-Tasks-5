@@ -2,6 +2,7 @@ import re
 
 from apps.jobs.models import Job
 from apps.resumes.models import Resume
+from .constants import REVIEW_THRESHOLD, STRONG_MATCH_THRESHOLD
 
 
 def extract_skills(resume_text: str, job: Job) -> list[str]:
@@ -55,13 +56,13 @@ def find_missing_skills(
 
 
 def build_recommendation(match_score: float) -> tuple[str, str]:
-    if match_score >= 80:
+    if match_score >= STRONG_MATCH_THRESHOLD:
         return (
             "Strong Match",
             "Candidate is highly aligned with the role.",
         )
 
-    if match_score >= 50:
+    if match_score >= REVIEW_THRESHOLD:
         return (
             "Review Further",
             "Candidate is a moderate fit and should be reviewed.",

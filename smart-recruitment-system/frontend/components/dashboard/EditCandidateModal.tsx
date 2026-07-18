@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { updateCandidate } from "@/services/candidates";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { Candidate } from "@/types/candidate";
 import {
   candidateSchema,
@@ -56,9 +57,7 @@ export default function EditCandidateModal({
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to update candidate."
+        getApiErrorMessage(error, "Failed to update candidate.")
       );
     },
   });

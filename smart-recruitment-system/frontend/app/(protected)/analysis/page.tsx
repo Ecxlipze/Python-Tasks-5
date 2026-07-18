@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { getAnalysis, createAnalysis } from "@/services/analysis";
 import { getResumes } from "@/services/resumes";
+import { LIST_PAGE_SIZE } from "@/constants/pagination";
 
 import Loading from "@/components/dashboard/Loading";
 import EmptyState from "@/components/dashboard/EmptyState";
@@ -43,7 +44,7 @@ export default function AnalysisPage() {
 
   const { data: resumesData } = useQuery({
     queryKey: ["resumes", "analysis-options"],
-    queryFn: () => getResumes({ page_size: 100 }),
+    queryFn: () => getResumes({ page_size: LIST_PAGE_SIZE }),
   });
 
   const mutation = useMutation({

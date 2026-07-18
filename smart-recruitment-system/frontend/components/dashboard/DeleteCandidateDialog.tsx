@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { deleteCandidate } from "@/services/candidates";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { Candidate } from "@/types/candidate";
 
 import {
@@ -37,9 +38,7 @@ export default function DeleteCandidateDialog({
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to delete candidate."
+        getApiErrorMessage(error, "Failed to delete candidate.")
       );
     },
   });

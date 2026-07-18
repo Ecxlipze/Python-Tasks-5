@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { createJob } from "@/services/jobs";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { jobSchema, type JobFormValues } from "@/lib/validations/job";
 
 import {
@@ -43,9 +44,7 @@ export default function CreateJobModal() {
       form.reset();
     },
     onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to create job."
-      );
+      toast.error(getApiErrorMessage(error, "Failed to create job."));
     },
   });
 

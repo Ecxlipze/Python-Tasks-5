@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { deleteJob } from "@/services/jobs";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { Job } from "@/types/job";
 
 import {
@@ -38,9 +39,7 @@ export default function DeleteJobDialog({
       toast.success("Job deleted successfully");
     },
     onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to delete job."
-      );
+      toast.error(getApiErrorMessage(error, "Failed to delete job."));
     },
   });
 

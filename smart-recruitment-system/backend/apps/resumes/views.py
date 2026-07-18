@@ -1,12 +1,10 @@
-from pathlib import Path
-
-from PyPDF2 import PdfReader
 from rest_framework import filters
 from rest_framework import parsers
 from rest_framework import viewsets
 
 from .models import Resume
 from .serializers import ResumeSerializer
+from .services import extract_resume_text
 from core.pagination import DefaultPagination
 
 class ResumeViewSet(viewsets.ModelViewSet):
@@ -31,25 +29,9 @@ class ResumeViewSet(viewsets.ModelViewSet):
             .order_by("-uploaded_at")
         )
 
-    def _extract_resume_text(self, resume_file):
-        file_extension = Path(resume_file.name).suffix.lower()
-
-        if file_extension != ".pdf":
-            return ""
-
-        reader = PdfReader(resume_file)
-        pages = []
-
-        for page in reader.pages:
-          page_text = page.extract_text() or ""
-          if page_text.strip():
-              pages.append(page_text.strip())
-
-        return "\n\n".join(pages)
-
     def perform_create(self, serializer):
         resume = serializer.save()
-        extracted_text = self._extract_resume_text(resume.resume_file)
+        extracted_text = extract_resume_text(resume.resume_file)
 
         if extracted_text != resume.extracted_text:
             resume.extracted_text = extracted_text

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { getCandidates } from "@/services/candidates";
 import { getJobs } from "@/services/jobs";
 import { uploadResume } from "@/services/resumes";
+import { LIST_PAGE_SIZE } from "@/constants/pagination";
 
 import { Button } from "@/components/ui/button";
 
@@ -20,12 +21,12 @@ export default function UploadResumeCard() {
 
   const { data: candidatesData } = useQuery({
     queryKey: ["candidates", "upload-options"],
-    queryFn: () => getCandidates({ page_size: 100 }),
+    queryFn: () => getCandidates({ page_size: LIST_PAGE_SIZE }),
   });
 
   const { data: jobsData } = useQuery({
     queryKey: ["jobs", "upload-options"],
-    queryFn: () => getJobs({ page_size: 100 }),
+    queryFn: () => getJobs({ page_size: LIST_PAGE_SIZE }),
   });
 
   const mutation = useMutation({

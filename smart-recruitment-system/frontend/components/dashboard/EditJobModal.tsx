@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { updateJob } from "@/services/jobs";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { Job } from "@/types/job";
 import { jobSchema, type JobFormValues } from "@/lib/validations/job";
 
@@ -55,9 +56,7 @@ export default function EditJobModal({
       setOpen(false);
     },
     onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to update job."
-      );
+      toast.error(getApiErrorMessage(error, "Failed to update job."));
     },
   });
 

@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { createCandidate } from "@/services/candidates";
+import { getApiErrorMessage } from "@/lib/api-error";
 import {
   candidateSchema,
   type CandidateFormValues,
@@ -47,9 +48,7 @@ export default function CreateCandidateModal() {
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to create candidate."
+        getApiErrorMessage(error, "Failed to create candidate.")
       );
     },
   });
