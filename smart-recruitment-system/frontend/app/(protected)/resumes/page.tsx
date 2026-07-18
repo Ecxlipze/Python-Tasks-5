@@ -57,7 +57,13 @@ export default function ResumesPage() {
   if (isLoading) return <Loading />;
 
   if (isError) {
-    return <EmptyState title="Failed to load resumes." />;
+    return (
+      <EmptyState
+        title="Unable to load resumes."
+        actionLabel="Retry"
+        onAction={() => window.location.reload()}
+      />
+    );
   }
 
   const resumes = data?.results ?? [];

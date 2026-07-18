@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import filters
 from rest_framework import parsers
 from rest_framework import viewsets
@@ -6,6 +8,8 @@ from .models import Resume
 from .serializers import ResumeSerializer
 from .services import extract_resume_text
 from core.pagination import DefaultPagination
+
+logger = logging.getLogger(__name__)
 
 class ResumeViewSet(viewsets.ModelViewSet):
     serializer_class = ResumeSerializer
@@ -31,8 +35,13 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         resume = serializer.save()
-        extracted_text = extract_resume_text(resume.resume_file)
 
-        if extracted_text != resume.extracted_text:
-            resume.extracted_text = extracted_text
-            resume.save(update_fields=["extracted_text"])
+        try:
+            extracted_text = extract_resume_text(resume.resume_file)
+
+            if extracted_text != resume.extracted_text:
+                resume.extracted_text = extracted_text
+                resume.save(update_fields=["extracted_text"])
+        except Exception:
+            logger.exception("Failed to extract text from resume %s", resume.pk)
+            raise

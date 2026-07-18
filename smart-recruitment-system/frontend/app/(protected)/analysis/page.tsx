@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 const PAGE_SIZE = 10;
 
@@ -56,9 +57,7 @@ export default function AnalysisPage() {
       setJobId("");
     },
     onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to run analysis."
-      );
+      toast.error(getApiErrorMessage(error, "Failed to run analysis."));
     },
   });
 
@@ -128,7 +127,13 @@ export default function AnalysisPage() {
   if (isLoading) return <Loading />;
 
   if (isError) {
-    return <EmptyState title="Failed to load analyses." />;
+    return (
+      <EmptyState
+        title="Unable to load analyses."
+        actionLabel="Retry"
+        onAction={() => window.location.reload()}
+      />
+    );
   }
 
   function handleSearchChange(value: string) {

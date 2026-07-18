@@ -57,7 +57,13 @@ export default function CandidatesPage() {
   if (isLoading) return <Loading />;
 
   if (isError) {
-    return <EmptyState title="Failed to load candidates." />;
+    return (
+      <EmptyState
+        title="Unable to load candidates."
+        actionLabel="Retry"
+        onAction={() => window.location.reload()}
+      />
+    );
   }
 
   const candidates = data?.results ?? [];

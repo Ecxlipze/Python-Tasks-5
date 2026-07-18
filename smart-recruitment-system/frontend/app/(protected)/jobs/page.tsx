@@ -64,7 +64,13 @@ export default function JobsPage() {
   if (isLoading) return <Loading />;
 
   if (isError) {
-    return <EmptyState title="Failed to load jobs." />;
+    return (
+      <EmptyState
+        title="Unable to load jobs."
+        actionLabel="Retry"
+        onAction={() => window.location.reload()}
+      />
+    );
   }
 
   const jobs = data?.results ?? [];

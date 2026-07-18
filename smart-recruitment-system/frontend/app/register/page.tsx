@@ -8,6 +8,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { registerUser } from "@/services/auth";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 const registerSchema = z
   .object({
@@ -50,29 +51,7 @@ export default function RegisterPage() {
       toast.success("Account created successfully. Please log in.");
       router.push("/login");
     } catch (error) {
-      const responseData =
-        typeof error === "object" && error !== null && "response" in error
-          ? (error as {
-              response?: {
-                data?: Record<string, string[] | string>;
-              };
-            }).response?.data
-          : undefined;
-
-      const message =
-        (Array.isArray(responseData?.username)
-          ? responseData.username[0]
-          : responseData?.username) ||
-        (Array.isArray(responseData?.email)
-          ? responseData.email[0]
-          : responseData?.email) ||
-        (Array.isArray(responseData?.password)
-          ? responseData.password[0]
-          : responseData?.password) ||
-        responseData?.detail ||
-        "Registration failed";
-
-      setSubmitError(message);
+      setSubmitError(getApiErrorMessage(error, "Registration failed"));
     }
   }
 

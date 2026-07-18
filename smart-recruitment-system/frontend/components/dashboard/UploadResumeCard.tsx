@@ -9,6 +9,7 @@ import { getCandidates } from "@/services/candidates";
 import { getJobs } from "@/services/jobs";
 import { uploadResume } from "@/services/resumes";
 import { LIST_PAGE_SIZE } from "@/constants/pagination";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 import { Button } from "@/components/ui/button";
 
@@ -42,9 +43,7 @@ export default function UploadResumeCard() {
       }
     },
     onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to upload resume."
-      );
+      toast.error(getApiErrorMessage(error, "Failed to upload resume."));
     },
   });
 

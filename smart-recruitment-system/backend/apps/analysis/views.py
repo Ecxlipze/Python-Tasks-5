@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -7,6 +9,8 @@ from .models import Analysis
 from .services import analyze_resume
 from .serializers import AnalysisSerializer
 from core.pagination import DefaultPagination
+
+logger = logging.getLogger(__name__)
 
 class AnalysisViewSet(viewsets.ModelViewSet):
     serializer_class = AnalysisSerializer
@@ -34,19 +38,24 @@ class AnalysisViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
 
-        resume = serializer.validated_data["resume"]
-        job = resume.job
-        analysis_data = analyze_resume(resume, job)
+        try:
+            serializer.is_valid(raise_exception=True)
 
-        analysis, created = Analysis.objects.update_or_create(
-            resume=resume,
-            defaults=analysis_data,
-        )
+            resume = serializer.validated_data["resume"]
+            job = resume.job
+            analysis_data = analyze_resume(resume, job)
 
-        output = self.get_serializer(analysis)
-        return Response(
-            output.data,
-            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
-        )
+            analysis, created = Analysis.objects.update_or_create(
+                resume=resume,
+                defaults=analysis_data,
+            )
+
+            output = self.get_serializer(analysis)
+            return Response(
+                output.data,
+                status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+            )
+        except Exception:
+            logger.exception("Failed to create analysis")
+            raise

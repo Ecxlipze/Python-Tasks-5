@@ -1,9 +1,26 @@
 from datetime import timedelta
 from pathlib import Path
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def _load_env_file() -> None:
+    env_path = BASE_DIR / ".env"
+
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text().splitlines():
+        line = raw_line.strip()
+
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip())
 
 
 def _env_bool(name: str, default: str = "false") -> bool:
@@ -16,6 +33,7 @@ def _env_list(name: str, default: str = "") -> list[str]:
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
+_load_env_file()
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-placeholder")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -42,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -105,9 +124,38 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Static files
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 CORS_ALLOWED_ORIGINS = _env_list("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_ALL_ORIGINS = not CORS_ALLOWED_ORIGINS
+
+SECURE_SSL_REDIRECT = _env_bool("SECURE_SSL_REDIRECT")
+SESSION_COOKIE_SECURE = _env_bool("SESSION_COOKIE_SECURE")
+CSRF_COOKIE_SECURE = _env_bool("CSRF_COOKIE_SECURE")
+SECURE_BROWSER_XSS_FILTER = _env_bool("SECURE_BROWSER_XSS_FILTER")
+SECURE_CONTENT_TYPE_NOSNIFF = _env_bool("SECURE_CONTENT_TYPE_NOSNIFF", "true")
+X_FRAME_OPTIONS = os.getenv("X_FRAME_OPTIONS", "DENY")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(name)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+    },
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

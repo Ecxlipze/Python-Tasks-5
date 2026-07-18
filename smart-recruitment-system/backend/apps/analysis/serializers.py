@@ -62,6 +62,12 @@ class AnalysisSerializer(serializers.ModelSerializer):
             "candidate_name",
             "job_title",
             "resume_file",
+            "extracted_skills",
+            "missing_skills",
+            "match_score",
+            "recommendation",
+            "recommendations",
+            "summary",
             "uploaded_at",
             "created_at",
         ]

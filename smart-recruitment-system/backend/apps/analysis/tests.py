@@ -1,5 +1,6 @@
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth.models import User
+from rest_framework.test import APITestCase, APIClient
 from django.test import TestCase
 
 from apps.analysis.models import Analysis
@@ -70,3 +71,40 @@ class AnalyzeResumeServiceTests(TestCase):
 
         self.assertEqual(analysis.resume, self.resume)
         self.assertEqual(analysis.recommendation, "Review Further")
+
+
+class AnalysisApiValidationTests(TestCase):
+    def test_analyze_endpoint_rejects_missing_resume(self):
+        user = User.objects.create_user(
+            username="recruiter2",
+            password="password123",
+        )
+        candidate = Candidate.objects.create(
+            full_name="Alice Doe",
+            email="alice@example.com",
+            phone="1234567890",
+            experience=2,
+            education="BS IT",
+        )
+        job = Job.objects.create(
+            recruiter=user,
+            title="ML Engineer",
+            company="OpenAI",
+            description="Build models",
+            required_skills=["Python"],
+            location="Remote",
+        )
+        client = APIClient()
+        client.force_authenticate(user=user)
+
+        response = client.post(
+            "/api/v1/analysis/",
+            {
+                "candidate": candidate.id,
+                "job": job.id,
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("No resume found", str(response.data))

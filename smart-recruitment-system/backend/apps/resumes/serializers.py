@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from rest_framework import serializers
 from .models import Resume
 
@@ -30,3 +32,9 @@ class ResumeSerializer(serializers.ModelSerializer):
             "extracted_text",
             "uploaded_at",
         ]
+
+    def validate_resume_file(self, value):
+        if Path(value.name).suffix.lower() != ".pdf":
+            raise serializers.ValidationError("Only PDF files are allowed.")
+
+        return value
