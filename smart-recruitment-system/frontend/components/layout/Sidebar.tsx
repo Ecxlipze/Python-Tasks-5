@@ -1,7 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Briefcase, Users, FileText, Brain, Settings, LayoutDashboard } from "lucide-react";
+import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  Briefcase,
+  Users,
+  FileText,
+  Brain,
+  Settings,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const menuItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -12,22 +26,36 @@ const menuItems = [
   { title: "Settings", href: "/settings", icon: Settings },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen: boolean;
+  onMobileOpenChange: (open: boolean) => void;
+}
+
+function SidebarContent() {
+  const pathname = usePathname();
+
   return (
-    <aside className="w-64 border-r bg-slate-900 text-white">
-      <div className="p-6 border-b border-slate-700">
+    <>
+      <div className="border-b border-slate-700 p-6">
         <h1 className="text-2xl font-bold">RecruitAI</h1>
+        <p className="text-sm text-slate-400">Smart Recruitment</p>
       </div>
 
-      <nav className="p-4 space-y-2">
+      <nav className="mt-4 px-3">
         {menuItems.map((item) => {
           const Icon = item.icon;
+
+          const active = pathname === item.href;
 
           return (
             <Link
               key={item.title}
               href={item.href}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 transition hover:bg-slate-800"
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 mb-2 transition ${
+                active
+                  ? "bg-blue-600"
+                  : "hover:bg-slate-800 text-slate-300"
+              }`}
             >
               <Icon size={18} />
               {item.title}
@@ -35,6 +63,28 @@ export default function Sidebar() {
           );
         })}
       </nav>
-    </aside>
+    </>
+  );
+}
+
+export default function Sidebar({
+  mobileOpen,
+  onMobileOpenChange,
+}: SidebarProps) {
+  return (
+    <>
+      <aside className="hidden min-h-screen w-64 bg-slate-900 text-white md:block">
+        <SidebarContent />
+      </aside>
+
+      <Sheet open={mobileOpen} onOpenChange={onMobileOpenChange}>
+        <SheetContent side="left" className="w-[280px] bg-slate-900 p-0 text-white md:hidden">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Navigation</SheetTitle>
+          </SheetHeader>
+          <SidebarContent />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
