@@ -88,7 +88,11 @@ export default function JobsPage() {
         buttonText={<CreateJobModal />}
       />
 
-      <SearchBar value={search} onChange={handleSearchChange} />
+      <SearchBar
+        value={search}
+        onChange={handleSearchChange}
+        placeholder="Search jobs..."
+      />
 
       {jobs.length === 0 ? (
         <EmptyState title="No jobs found." />

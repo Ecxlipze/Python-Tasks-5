@@ -34,7 +34,10 @@ def _env_list(name: str, default: str = "") -> list[str]:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 _load_env_file()
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-placeholder")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-development-placeholder-change-me-to-a-long-random-secret",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _env_bool("DEBUG")

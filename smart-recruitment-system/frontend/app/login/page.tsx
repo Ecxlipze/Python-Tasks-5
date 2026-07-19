@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import { loginUser } from "@/services/auth";
 import { useAuth } from "@/context/AuthContext";
@@ -33,14 +34,19 @@ export default function LoginPage() {
       login(data.access, data.refresh);
 
       router.push("/dashboard");
-    } catch (err: any) {
-      console.error("❌ Login Error:", err);
+    } catch (error) {
+      console.error("Login Error:", error);
 
-      setError(
-        err.response?.data?.detail ||
-          JSON.stringify(err.response?.data) ||
-          "Login failed"
-      );
+      if (axios.isAxiosError(error)) {
+        setError(
+          error.response?.data?.detail ||
+            JSON.stringify(error.response?.data) ||
+            "Login failed"
+        );
+        return;
+      }
+
+      setError("Login failed");
     } finally {
       setLoading(false);
     }

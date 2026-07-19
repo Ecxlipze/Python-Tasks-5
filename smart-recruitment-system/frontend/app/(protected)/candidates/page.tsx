@@ -81,7 +81,11 @@ export default function CandidatesPage() {
         buttonText={<CreateCandidateModal />}
       />
 
-      <SearchBar value={search} onChange={handleSearchChange} />
+      <SearchBar
+        value={search}
+        onChange={handleSearchChange}
+        placeholder="Search candidates..."
+      />
 
       {candidates.length === 0 ? (
         <EmptyState title="No candidates found." />

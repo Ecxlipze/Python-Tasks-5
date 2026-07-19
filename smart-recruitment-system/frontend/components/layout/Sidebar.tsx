@@ -31,7 +31,11 @@ interface SidebarProps {
   onMobileOpenChange: (open: boolean) => void;
 }
 
-function SidebarContent() {
+function SidebarContent({
+  onNavigate,
+}: {
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
 
   return (
@@ -51,6 +55,7 @@ function SidebarContent() {
             <Link
               key={item.title}
               href={item.href}
+              onClick={onNavigate}
               className={`flex items-center gap-3 rounded-lg px-4 py-3 mb-2 transition ${
                 active
                   ? "bg-blue-600"
@@ -82,7 +87,7 @@ export default function Sidebar({
           <SheetHeader className="sr-only">
             <SheetTitle>Navigation</SheetTitle>
           </SheetHeader>
-          <SidebarContent />
+          <SidebarContent onNavigate={() => onMobileOpenChange(false)} />
         </SheetContent>
       </Sheet>
     </>
