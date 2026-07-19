@@ -45,7 +45,7 @@ export default function DeleteCandidateDialog({
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
+      <AlertDialogTrigger>
         <Button
           variant="ghost"
           size="icon"

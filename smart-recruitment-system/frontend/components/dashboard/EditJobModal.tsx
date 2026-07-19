@@ -80,7 +80,7 @@ export default function EditJobModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button
           variant="ghost"
           size="icon"

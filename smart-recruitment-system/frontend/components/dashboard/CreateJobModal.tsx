@@ -66,7 +66,7 @@ export default function CreateJobModal() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button className="rounded-lg px-5 py-2">+ New Job</Button>
       </DialogTrigger>
 
