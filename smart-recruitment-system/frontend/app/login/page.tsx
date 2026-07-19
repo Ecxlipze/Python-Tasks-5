@@ -30,17 +30,11 @@ export default function LoginPage() {
         password,
       });
 
-      console.log("✅ Login Success:", data);
-
       login(data.access, data.refresh);
 
       router.push("/dashboard");
     } catch (err: any) {
       console.error("❌ Login Error:", err);
-
-      console.log("Response:", err.response);
-      console.log("Status:", err.response?.status);
-      console.log("Data:", err.response?.data);
 
       setError(
         err.response?.data?.detail ||
