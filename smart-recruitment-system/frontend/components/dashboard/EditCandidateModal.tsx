@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { updateCandidate } from "@/services/candidates";
 import { getApiErrorMessage } from "@/lib/api-error";
@@ -36,7 +37,7 @@ export default function EditCandidateModal({
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
-  const form = useForm<CandidateFormValues>({
+  const form = useForm<z.input<typeof candidateSchema>, unknown, CandidateFormValues>({
     resolver: zodResolver(candidateSchema),
     defaultValues: {
       full_name: candidate.full_name,
