@@ -84,7 +84,7 @@ export default function EditCandidateModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button variant="ghost" size="icon" className="text-blue-600 hover:text-blue-800">
           {trigger ?? "Edit"}
         </Button>

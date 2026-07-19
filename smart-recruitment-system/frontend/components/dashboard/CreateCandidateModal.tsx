@@ -69,7 +69,7 @@ export default function CreateCandidateModal() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button className="rounded-lg px-5 py-2">+ New Candidate</Button>
       </DialogTrigger>
 
