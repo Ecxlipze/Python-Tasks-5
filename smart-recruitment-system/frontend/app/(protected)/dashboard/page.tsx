@@ -13,7 +13,6 @@ import Loading from "@/components/dashboard/Loading";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
 const previewCount = 3;
 
@@ -89,12 +88,18 @@ export default function DashboardPage() {
         </p>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <Button asChild>
-            <Link href="/jobs">+ New Job</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/analysis">Run Analysis</Link>
-          </Button>
+          <Link
+            href="/jobs"
+            className="inline-flex h-8 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/80"
+          >
+            + New Job
+          </Link>
+          <Link
+            href="/analysis"
+            className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-background px-3 text-sm font-medium text-foreground transition hover:bg-muted"
+          >
+            Run Analysis
+          </Link>
         </div>
       </div>
 
